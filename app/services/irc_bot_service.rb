@@ -63,24 +63,15 @@ class IrcBotService
     queue.start
 
     while true do
-      request = queue.receive(:timeout => 500, :decode => false)
-      handle_request(request) unless request.nil?
+      queue.receive_and_publish(:timeout => 500) do |request|
+        @messages.select { |message| message[:time] > request[:since] }
+      end
 
       # Jump out of the loop if we're shutting down
       if @halt
         queue.destroy
         break
       end
-    end
-  end
-
-  def handle_request(request)
-    reply = request.getJMSReplyTo
-    payload = request.decode
-    response = @messages.select { |message| message[:time] > payload[:since] }
-    TorqueBox::Messaging::Client.connect do |session|
-      session.publish(reply, response)
-      session.commit if session.transacted?
     end
   end
 
