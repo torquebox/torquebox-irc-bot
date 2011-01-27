@@ -28,7 +28,10 @@ gem 'rails', '3.0.3'
 # group :development, :test do
 #   gem 'webrat'
 # end
-gem "activerecord-jdbc-adapter", "0.9.7", :require => "jdbc_adapter"
-gem "jdbc-sqlite3"
+# gem "activerecord-jdbc-adapter", "0.9.7", :require => "jdbc_adapter"
+# gem "jdbc-sqlite3"
 gem "jruby-openssl"
 gem "org.torquebox.rake-support"
+gem "org.torquebox.torquebox-messaging-client"
+
+gem "bbrowning-ponder", :require => "ponder"
