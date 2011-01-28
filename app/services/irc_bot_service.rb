@@ -51,10 +51,6 @@ class IrcBotService
       @messages.slice!(0) if @messages.length > 100
     end
 
-    # Respond to everything with "kk"
-    # @bot.on :channel, /^#{@nick}:/ do |event_data|
-    #   @bot.message event_data[:channel], "#{event_data[:nick]}: kk"
-    # end
     bot
   end
 
