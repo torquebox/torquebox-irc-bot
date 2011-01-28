@@ -1,13 +1,4 @@
 <h1>IRC Messages</h1>
 
 <ul id="messages">
-<% unless @messages.nil? %>
-  <% @messages.each do |message| %>
-    <li>
-      <%= message[:time] %>
-      <%= message[:nick] %>
-      <%= message[:text] %>
-    </li>
-  <% end %>
-<% end %>
 </ul>
