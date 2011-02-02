@@ -8,7 +8,7 @@ class IrcController < ApplicationController
 
     # Ask the IRC bot for all new messages
     queue = TorqueBox::Messaging::Queue.new('/queues/irc_messages')
-    messages = queue.publish_and_receive({:since => since}, :timeout => 2000) || []
+    messages = queue.publish_and_receive({:since => since}, :timeout => 1000) || []
 
     # Update the timestamp of the last seen message
     session[:last_seen] = messages.blank? ? since : messages.last[:time]
