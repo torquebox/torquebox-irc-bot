@@ -35,3 +35,4 @@ gem "org.torquebox.rake-support"
 gem "org.torquebox.torquebox-messaging-client"
 
 gem "bbrowning-ponder", :require => "ponder"
+
