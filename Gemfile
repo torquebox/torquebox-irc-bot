@@ -32,7 +32,7 @@ gem 'rails', '3.0.3'
 # gem "jdbc-sqlite3"
 gem "jruby-openssl"
 gem "org.torquebox.rake-support"
-gem "org.torquebox.torquebox-messaging-client"
+gem "org.torquebox.messaging-client"
 
 gem "bbrowning-ponder", :require => "ponder"
 

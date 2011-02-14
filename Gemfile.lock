@@ -45,10 +45,10 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    org.torquebox.messaging-client (1.0.0.CR1-java)
+      org.torquebox.naming-client (= 1.0.0.CR1)
+    org.torquebox.naming-client (1.0.0.CR1-java)
     org.torquebox.rake-support (1.0.0.CR1)
-    org.torquebox.torquebox-messaging-client (1.0.0.CR1-java)
-      org.torquebox.torquebox-naming-client (= 1.0.0.CR1)
-    org.torquebox.torquebox-naming-client (1.0.0.CR1-java)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -80,6 +80,6 @@ PLATFORMS
 DEPENDENCIES
   bbrowning-ponder
   jruby-openssl
+  org.torquebox.messaging-client
   org.torquebox.rake-support
-  org.torquebox.torquebox-messaging-client
   rails (= 3.0.3)
