@@ -6,7 +6,6 @@ class IrcBotService
     @channel = options['channel']
 
     @messages = []
-    @halt = false
   end
 
   def start
@@ -20,7 +19,7 @@ class IrcBotService
     # Disconnect from IRC
     @bot.quit
     # Notify our queue receiver to stop
-    @halt = true
+    @done = true
     # Wait for all spawned threads to exit
     @queue_thread.join
     @bot_thread.join
@@ -56,17 +55,10 @@ class IrcBotService
 
   def start_queue
     queue = TorqueBox::Messaging::Queue.new('/queues/irc_messages')
-    queue.start
 
-    while true do
+    until @done do
       queue.receive_and_publish(:timeout => 500) do |request|
         @messages.select { |message| message[:time] > request[:since] }
-      end
-
-      # Jump out of the loop if we're shutting down
-      if @halt
-        queue.destroy
-        break
       end
     end
   end

@@ -1,3 +1,6 @@
+queues:
+  /queues/irc_messages:
+
 services:
   IrcBotService:
     singleton: true
