@@ -16,5 +16,5 @@ services:
     nick: torquebox_bot
     server: irc.freenode.net
     port: 6667
-    channel: '#projectodd'
+    channel: '#torquebox'
     destination: /queues/irc_messages
