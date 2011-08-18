@@ -1,20 +1,20 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
 
-function fetchMessages() {
-  $.ajax({
-    url: '/',
-    dataType: 'json',
-    success: function(data) {
-      $(data).each(function(index, message) {
-        var html = "<li>" + message + "</li>";
-        $("#messages").append(html);
-      });
-      setTimeout(function() { fetchMessages(); }, 1500);
-    }
-  });
-}
+$( function() {
+  client = Stomp.client( "ws://localhost:8675/" )
 
-$(function() {
-  fetchMessages();
-});
+  client.debug = function(message) {
+    console.debug( message )
+  }
+
+  client.connect( null, null, function() {
+    $(window).unload(function() { client.disconnect() });
+    
+    client.subscribe( '/stomplet/irc', function(message) {
+      // received a message!
+      var html = "<li>" + message.body + "</li>"
+      $("#messages").append(html)
+    } )
+  } )
+
+} )
+

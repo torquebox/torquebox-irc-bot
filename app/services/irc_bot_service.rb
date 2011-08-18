@@ -1,18 +1,18 @@
 class IrcBotService
+  include TorqueBox::Injectors
+  
   def initialize(options={})
-    @nick = options['nick']
-    @server = options['server']
-    @port = options['port']
-    @channel = options['channel']
-
-    @messages = []
+    @nick        = options['nick']
+    @server      = options['server']
+    @port        = options['port']
+    @channel     = options['channel']
+    @destination = options['destination']
   end
 
   def start
     @bot = configure_bot
     # Start the IRC bot and queue in separate threads
     @bot_thread = Thread.new { @bot.connect }
-    @queue_thread = Thread.new { start_queue }
   end
 
   def stop
@@ -21,7 +21,6 @@ class IrcBotService
     # Notify our queue receiver to stop
     @done = true
     # Wait for all spawned threads to exit
-    @queue_thread.join
     @bot_thread.join
   end
 
@@ -30,9 +29,9 @@ class IrcBotService
   def configure_bot
     bot = Ponder::Thaum.new
     bot.configure do |c|
-      c.nick = @nick
+      c.nick   = @nick
       c.server = @server
-      c.port = @port
+      c.port   = @port
     end
 
     # Join requested channel
@@ -41,26 +40,13 @@ class IrcBotService
     end
 
     # Log all channel messages to the queue
+    queue = inject('/queues/irc_messages')
     bot.on :channel do |event_data|
-      @messages << {
-        :time => Time.now,
-        :nick => event_data[:nick],
-        :text => event_data[:message]
-      }
-      @messages.slice!(0) if @messages.length > 100
+      text = "[#{Time.now.ctime}] #{event_data[:nick]}: #{event_data[:message]}"
+      message = org.projectodd.stilts.stomp::StompMessages.createStompMessage( @destination, text )
+      queue.publish( message.content_as_string )
     end
 
     bot
   end
-
-  def start_queue
-    queue = TorqueBox::Messaging::Queue.new('/queues/irc_messages')
-
-    until @done do
-      queue.receive_and_publish(:timeout => 500) do |request|
-        @messages.select { |message| message[:time] > request[:since] }
-      end
-    end
-  end
-
 end

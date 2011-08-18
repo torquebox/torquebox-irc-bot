@@ -1,6 +1,7 @@
+source 'http://torquebox.org/2x/builds/LATEST/gem-repo/'
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.3'
+gem 'rails', '3.0.9'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -31,8 +32,7 @@ gem 'rails', '3.0.3'
 # gem "activerecord-jdbc-adapter", "0.9.7", :require => "jdbc_adapter"
 # gem "jdbc-sqlite3"
 gem "jruby-openssl"
-gem "org.torquebox.rake-support"
-gem "org.torquebox.messaging-client"
-
+gem "torquebox-rake-support", "~> 2.x.incremental.320"
+gem "torquebox-messaging", "~> 2.x.incremental.320"
+gem "torquebox-stomp", "~> 2.x.incremental.320"
 gem "bbrowning-ponder", :require => "ponder"
-

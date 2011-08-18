@@ -1,10 +1,20 @@
 queues:
   /queues/irc_messages:
 
+stomp:
+  stomplets:
+    irc_stomplet:
+      class: IrcStomplet
+      route: '/stomplet/irc'
+      config:
+        destination: /queues/irc_messages
+        type: queue
+
 services:
   IrcBotService:
     singleton: true
     nick: torquebox_bot
     server: irc.freenode.net
     port: 6667
-    channel: '#torquebox'
+    channel: '#projectodd'
+    destination: /queues/irc_messages
