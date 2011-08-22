@@ -1,7 +1,7 @@
-require 'torquebox-stomp'
+require 'torquebox-messaging'
 
 class IrcStomplet < TorqueBox::Stomp::JmsStomplet
-  include TorqueBox::Injectors
+  include TorqueBox::Messaging
 
   def initialize()
     super
@@ -9,7 +9,7 @@ class IrcStomplet < TorqueBox::Stomp::JmsStomplet
 
   def configure(config)
     super
-    @destination = inject(config['destination'])
+    @destination = Queue.new( config['destination'] )
   end
 
   def on_subscribe(subscriber)

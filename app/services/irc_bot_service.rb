@@ -1,12 +1,14 @@
+require 'torquebox-messaging'
+
 class IrcBotService
-  include TorqueBox::Injectors
+  include TorqueBox::Messaging
   
   def initialize(options={})
     @nick        = options['nick']
     @server      = options['server']
     @port        = options['port']
     @channel     = options['channel']
-    @destination = options['destination']
+    @destination = Queue.new( options['destination'] )
   end
 
   def start
@@ -38,9 +40,8 @@ class IrcBotService
     end
 
     # Log all channel messages to the queue
-    queue = inject(@destination)
     bot.on :channel do |event_data|
-      queue.publish( event_data[:message], :properties => {:sender=>event_data[:nick], :timestamp=>Time.now.ctime} )
+      @destination.publish( event_data[:message], :properties => {:sender=>event_data[:nick], :timestamp=>Time.now.ctime} )
     end
 
     bot

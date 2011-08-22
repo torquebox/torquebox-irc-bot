@@ -88,6 +88,6 @@ DEPENDENCIES
   bbrowning-ponder
   jruby-openssl
   rails (= 3.0.9)
-  torquebox-messaging (~> 2.x.incremental.320)
-  torquebox-rake-support (~> 2.x.incremental.320)
-  torquebox-stomp (~> 2.x.incremental.320)
+  torquebox-messaging (~> 2.x.incremental.336)
+  torquebox-rake-support (~> 2.x.incremental.336)
+  torquebox-stomp (~> 2.x.incremental.336)

@@ -1,0 +1,10 @@
+ul#messages { list-style: none; margin: 0; padding: 0; }
+
+ul#messages li { border-top: 1px dotted #aaa; padding: 5px 0; }
+
+ul#messages li .ts {
+  color: #999;
+}
+ul#messages li .nick {
+  color: #339;
+}

@@ -11,7 +11,7 @@ $( function() {
     
     client.subscribe( '/stomplet/irc', function(message) {
       // received a message!
-      var html = "<li>["+message.headers.timestamp+"] "+message.headers.sender+": "+message.body+"</li>"
+      var html = "<li><span class='ts'>["+message.headers.timestamp+"]</span> <span class='nick'>"+message.headers.sender+":</span> "+message.body+"</li>"
       $("#messages").append(html)
     } )
   } )
