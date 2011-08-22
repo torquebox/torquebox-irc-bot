@@ -1,25 +1,20 @@
 require 'torquebox-stomp'
 
 class IrcStomplet < TorqueBox::Stomp::JmsStomplet
+  include TorqueBox::Injectors
 
   def initialize()
     super
   end
 
-  def configure(stomplet_config)
+  def configure(config)
     super
-    @destination      = stomplet_config['destination']
-    @destination_type = stomplet_config['type']
-  end
-
-  def on_message(stomp_message, session)
-    send_to( stomp_message, @destination, @destination_type )
+    @destination = inject(config['destination'])
   end
 
   def on_subscribe(subscriber)
-    subscribe_to( subscriber, @destination, @destination_type )
-    announcement = org.projectodd.stilts.stomp::StompMessages.createStompMessage( @destination, "[#{Time.now.ctime}] TorqueBox bot in da house!" )
-    send_to( announcement, @destination, @destination_type )
+    subscribe_to( subscriber, @destination )
+    send_to( @destination, "TorqueBoxBot in da house", :sender => :system, :timestamp => Time.now.ctime )
   end
 
 end

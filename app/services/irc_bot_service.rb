@@ -18,8 +18,6 @@ class IrcBotService
   def stop
     # Disconnect from IRC
     @bot.quit
-    # Notify our queue receiver to stop
-    @done = true
     # Wait for all spawned threads to exit
     @bot_thread.join
   end
@@ -40,11 +38,9 @@ class IrcBotService
     end
 
     # Log all channel messages to the queue
-    queue = inject('/queues/irc_messages')
+    queue = inject(@destination)
     bot.on :channel do |event_data|
-      text = "[#{Time.now.ctime}] #{event_data[:nick]}: #{event_data[:message]}"
-      message = org.projectodd.stilts.stomp::StompMessages.createStompMessage( @destination, text )
-      queue.publish( message.content_as_string )
+      queue.publish( event_data[:message], :properties => {:sender=>event_data[:nick], :timestamp=>Time.now.ctime} )
     end
 
     bot
