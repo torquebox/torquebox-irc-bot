@@ -1,3 +1,5 @@
+require 'ponder'
+
 class IrcBotService
   def initialize(options={})
     @nick = options['nick']
