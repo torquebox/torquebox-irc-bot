@@ -1,4 +1,6 @@
 class IrcController < ApplicationController
+  include TorqueBox::Injectors
+
   respond_to :html, :json
 
   def index
@@ -7,15 +9,15 @@ class IrcController < ApplicationController
     since = session[:last_seen] || Time.now
 
     # Ask the IRC bot for all new messages
-    queue = TorqueBox::Messaging::Queue.new('/queues/irc_messages')
-    messages = queue.publish_and_receive({:since => since}, :timeout => 1000) || []
+    service = inject('service:irc_bot_service')
+    messages = service.new_messages(since)
 
     # Update the timestamp of the last seen message
-    session[:last_seen] = messages.blank? ? since : messages.last[:time]
+    session[:last_seen] = messages.blank? ? since : messages.last['time']
 
     # Convert each message from a hash into a text string for display
     @formatted_messages = messages.map do |message|
-      "#{message[:time].to_s(:short)} #{message[:nick]}: #{message[:text]}"
+      "#{message['time'].to_s(:short)} #{message['nick']}: #{message['text']}"
     end
     respond_with(@formatted_messages)
   end

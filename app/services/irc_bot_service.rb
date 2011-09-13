@@ -10,19 +10,19 @@ class IrcBotService
 
   def start
     @bot = configure_bot
-    # Start the IRC bot and queue in separate threads
+    # Start the IRC bot in a separate thread
     @bot_thread = Thread.new { @bot.connect }
-    @queue_thread = Thread.new { start_queue }
   end
 
   def stop
     # Disconnect from IRC
     @bot.quit
-    # Notify our queue receiver to stop
-    @done = true
-    # Wait for all spawned threads to exit
-    @queue_thread.join
+    # Wait for the spawned thread to exit
     @bot_thread.join
+  end
+
+  def new_messages(since)
+    @messages.select { |message| message['time'] > since }
   end
 
   protected
@@ -43,24 +43,14 @@ class IrcBotService
     # Log all channel messages to the queue
     bot.on :channel do |event_data|
       @messages << {
-        :time => Time.now,
-        :nick => event_data[:nick],
-        :text => event_data[:message]
+        'time' => Time.now,
+        'nick' => event_data[:nick],
+        'text' => event_data[:message]
       }
       @messages.slice!(0) if @messages.length > 100
     end
 
     bot
-  end
-
-  def start_queue
-    queue = TorqueBox::Messaging::Queue.new('/queues/irc_messages')
-
-    until @done do
-      queue.receive_and_publish(:timeout => 500) do |request|
-        @messages.select { |message| message[:time] > request[:since] }
-      end
-    end
   end
 
 end

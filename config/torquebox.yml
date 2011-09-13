@@ -1,10 +1,8 @@
-queues:
-  /queues/irc_messages:
-
 services:
-  IrcBotService:
-    singleton: true
-    nick: torquebox_bot
-    server: irc.freenode.net
-    port: 6667
-    channel: '#torquebox'
+  irc_bot_service:
+    service: IrcBotService
+    config:
+      nick: mybotsnick
+      server: irc.freenode.net
+      port: 6665
+      channel: '#mybotschannel'
